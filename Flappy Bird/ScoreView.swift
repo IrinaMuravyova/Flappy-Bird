@@ -1,5 +1,5 @@
 //
-//  Score.swift
+//  ScoreView.swift
 //  Flappy Bird
 //
 //  Created by Irina Muravyeva on 27.01.2024.
@@ -7,9 +7,11 @@
 
 import SwiftUI
 
-struct Score: View {
+struct ScoreView: View {
+    
     let score: Int
     let highScore: Int
+    
     var body: some View {
         VStack {
             Text("Game over")
@@ -29,5 +31,5 @@ struct Score: View {
 }
 
 #Preview {
-    Score(score: 3, highScore: 5)
+    ScoreView(score: 3, highScore: 5)
 }

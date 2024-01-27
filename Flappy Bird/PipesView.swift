@@ -1,5 +1,5 @@
 //
-//  Pipes.swift
+//  PipesView.swift
 //  Flappy Bird
 //
 //  Created by Irina Muravyeva on 27.01.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Pipes: View {
+struct PipesView: View {
     var body: some View {
         VStack {
             Image(.flappeBirdPipe)
@@ -22,5 +22,5 @@ struct Pipes: View {
 }
 
 #Preview {
-    Pipes()
+    PipesView()
 }
