@@ -27,6 +27,7 @@ struct GameView: View {
     @State private var birdVelocity = CGVector(dx: 0, dy: 0)
     
     private let birdSize = 100.0
+    private let birdRadius = 13.0 //определила опытным путем
     
     enum GameState {
         case ready, active, stop
@@ -150,10 +151,10 @@ struct GameView: View {
     }
     
     private func checkColisions(geometry: GeometryProxy) -> Bool {
-        let birdFrame = CGRect(x: birdPosition.x - birdSize / 2,
-                               y: birdPosition.y - birdSize / 2,
-                               width: birdSize,
-                               height: birdSize)
+        let birdFrame = CGRect(x: birdPosition.x - birdRadius / 2,
+                               y: birdPosition.y - birdRadius / 2,
+                               width: birdRadius,
+                               height: birdRadius)
         let topPipeFrame = CGRect(x: geometry.size.width + pipeOffset,
                                   y: 0,
                                   width: pipeWeight,
