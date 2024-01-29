@@ -26,13 +26,15 @@ struct GameView: View {
                         .padding(.bottom, -50)
                         .padding(.trailing, -50)
                     
-                    BirdView()
+                    BirdView(birdSize: 100)
                         .position(birdPosition)
                     
                     PipesView(pipeWeight: pipeWeight,
                               spacingHeight: spacingHeight,
                               topPipeHeight: topPipeHeight)
                     .offset(x: geo.size.width + pipeOffset)
+                    
+                    ScoreView(score: 3, highScore: 5)
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {

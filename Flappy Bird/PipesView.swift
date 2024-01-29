@@ -33,7 +33,7 @@ struct PipesView: View {
             Image(.flappeBirdPipe)
                 .resizable()
                 .frame(width: pipeWeight,
-                height: bottomPipeHeight)
+                       height: bottomPipeHeight)
 
         }
         })
