@@ -11,6 +11,7 @@ struct ScoreView: View {
     
     let score: Int
     let highScore: Int
+    let resetAction: () -> Void
     
     var body: some View {
         VStack {
@@ -19,17 +20,23 @@ struct ScoreView: View {
                 .padding()
             Text("Score \(score)")
                 .font(.title)
-                .padding()
-            Text("Best score \(highScore)")
+            Text("BEST \(highScore)")
                 .font(.title)
                 .padding()
+            Button("Reset", 
+                   action: resetAction)
+            .buttonStyle(.borderedProminent)
+            .font(.largeTitle)
+            .controlSize(.large)
+            .padding()
         }
-        .background(.white)
-        .opacity(0.6)
+        .background(.white.opacity(0.6))
         .clipShape(.rect(cornerRadius: 30))
     }
 }
 
 #Preview {
-    ScoreView(score: 3, highScore: 5)
+    ScoreView(score: 3, 
+              highScore: 5,
+              resetAction: {})
 }

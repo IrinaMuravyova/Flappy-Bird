@@ -34,7 +34,7 @@ struct GameView: View {
                               topPipeHeight: topPipeHeight)
                     .offset(x: geo.size.width + pipeOffset)
                     
-                    ScoreView(score: 3, highScore: 5)
+                    ScoreView(score: 3, highScore: 5, resetAction: {})
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
