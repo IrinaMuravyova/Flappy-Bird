@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct BirdView: View {
+    
+    let birdSize: CGFloat
+    
     var body: some View {
         Image(.flappyBird)
             .resizable()
             .scaledToFit()
-            .frame(width: 100)
+            .frame(width: birdSize)
     }
 }
 
 #Preview {
-    BirdView()
+    BirdView(birdSize: 100)
 }
