@@ -15,6 +15,7 @@ struct GameView: View {
     private let spacingHeight: CGFloat = 200
     @State private var pipeOffset: CGFloat = 0
     @State private var score: Int = 0
+    @State private var highScore: Int = 0
     
     //каждые 0,01 секунды мы будем отправлять в main поток данные в режиме common
     private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect() 
@@ -24,6 +25,14 @@ struct GameView: View {
     
     // направление того, куда движется наша птичка (вектор ее свободного падения)
     @State private var birdVelocity = CGVector(dx: 0, dy: 0)
+    
+    private let birdSize = 100.0
+    
+    enum GameState {
+        case ready, active, stop
+    }
+    
+    @State private var gameState: GameState = .ready
     
     var body: some View {
         GeometryReader { geo in
@@ -35,19 +44,38 @@ struct GameView: View {
                         .padding(.bottom, -50)
                         .padding(.trailing, -50)
                     
-                    BirdView(birdSize: 100)
+                    BirdView(birdSize: birdSize)
                         .position(birdPosition)
                     
                     PipesView(pipeWeight: pipeWeight,
                               spacingHeight: spacingHeight,
                               topPipeHeight: topPipeHeight)
                     .offset(x: geo.size.width + pipeOffset)
+                    
+                    if gameState == .ready {
+                        Button {
+                            playAction()
+                        } label: {
+                            Image(systemName: "play.fill")
+                        }.font(.system(size: 80))
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    
+                    if gameState == .stop {
+                        ScoreView(score: score,
+                                  highScore: highScore,
+                                  resetAction: resetAction)
+                        
+                    }
                 }
                 .onTapGesture { //обрабатывает этот код при нажатии на экран
                     // те на эту величину птичка прыгает вверх при тапе на экран
                     birdVelocity = CGVector(dx: 0, dy: -400)
                 }
                 .onReceive(timer, perform: { currentTime in //получаем сообщения от нашего таймера
+                    
+                    guard gameState == .active else {return}
+                    
                     let deltaTime = currentTime.timeIntervalSince(lastUpdateTime)
                     
                     applyGravity(deltaTime: deltaTime)
@@ -55,6 +83,10 @@ struct GameView: View {
                     checkBounds(geometry: geo)
                     updatePipePosition(deltaTime: deltaTime)
                     resetPipePosition(geometry: geo)
+                    
+                    if checkColisions(geometry: geo) {
+                        gameState = .stop
+                    }
                     
                     lastUpdateTime = currentTime
                 })
@@ -84,10 +116,12 @@ struct GameView: View {
             birdPosition.y = geometry.size.height - 50
             // 50 случайное число, просто чтобы не впритык к экрану
             birdVelocity.dy = 0
+            gameState = .stop
         }
         
         if birdPosition.y <= 0 {
             birdPosition.y = 0
+            gameState = .stop
         }
     }
     
@@ -101,6 +135,35 @@ struct GameView: View {
             pipeOffset = 0
             topPipeHeight = CGFloat.random(in: 100...500)
         }
+    }
+    
+    private func playAction() {
+        gameState = .active
+        lastUpdateTime = Date()
+    }
+    
+    private func resetAction() {
+        gameState = .ready
+        birdPosition = CGPoint(x: 100, y: 300)
+        pipeOffset = 0
+        score = 0
+    }
+    
+    private func checkColisions(geometry: GeometryProxy) -> Bool {
+        let birdFrame = CGRect(x: birdPosition.x - birdSize / 2,
+                               y: birdPosition.y - birdSize / 2,
+                               width: birdSize,
+                               height: birdSize)
+        let topPipeFrame = CGRect(x: geometry.size.width + pipeOffset,
+                                  y: 0,
+                                  width: pipeWeight,
+                                  height: topPipeHeight)
+        let bottomPipeFrame = CGRect(x: geometry.size.width + pipeOffset,
+                                  y: topPipeHeight + spacingHeight,
+                                  width: pipeWeight,
+                                  height: topPipeHeight)
+        return birdFrame.intersects(topPipeFrame) || birdFrame.intersects(bottomPipeFrame)
+        //проверяем на пересечение птицы и верхней трубы
     }
 }
 
