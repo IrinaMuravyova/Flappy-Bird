@@ -53,6 +53,8 @@ struct GameView: View {
                     applyGravity(deltaTime: deltaTime)
                     updateBirdPosition(deltaTime: deltaTime)
                     checkBounds(geometry: geo)
+                    updatePipePosition(deltaTime: deltaTime)
+                    resetPipePosition(geometry: geo)
                     
                     lastUpdateTime = currentTime
                 })
@@ -86,6 +88,18 @@ struct GameView: View {
         
         if birdPosition.y <= 0 {
             birdPosition.y = 0
+        }
+    }
+    
+    private func updatePipePosition(deltaTime: TimeInterval){
+        pipeOffset -= 250 * deltaTime // скорость движения труб
+    }
+    
+    //когда правая граница трубы пересекает leading, запускаем трубы снова
+    private func resetPipePosition(geometry: GeometryProxy){
+        if pipeOffset <= -geometry.size.width - pipeWeight {
+            pipeOffset = 0
+            topPipeHeight = CGFloat.random(in: 100...500)
         }
     }
 }
