@@ -17,7 +17,7 @@ struct GameView: View {
     @State private var score: Int = 0
     
     //каждые 0,01 секунды мы будем отправлять в main поток данные в режиме common
-    private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: 0.01, on: .main, in: .common).autoconnect() 
     
     // сохраняем последнее время того момента, когда таймер обновился
     @State private var lastUpdateTime = Date()
@@ -44,6 +44,7 @@ struct GameView: View {
                     .offset(x: geo.size.width + pipeOffset)
                 }
                 .onTapGesture { //обрабатывает этот код при нажатии на экран
+                    // те на эту величину птичка прыгает вверх при тапе на экран
                     birdVelocity = CGVector(dx: 0, dy: -400)
                 }
                 .onReceive(timer, perform: { currentTime in //получаем сообщения от нашего таймера
@@ -51,6 +52,7 @@ struct GameView: View {
                     
                     applyGravity(deltaTime: deltaTime)
                     updateBirdPosition(deltaTime: deltaTime)
+                    checkBounds(geometry: geo)
                     
                     lastUpdateTime = currentTime
                 })
@@ -72,6 +74,19 @@ struct GameView: View {
     
     private func updateBirdPosition(deltaTime: TimeInterval){
         birdPosition.y += birdVelocity.dy * deltaTime
+    }
+    
+    // проверяю что птичка не выходит за границы
+    private func checkBounds(geometry: GeometryProxy){
+        if birdPosition.y > geometry.size.height - 50 {
+            birdPosition.y = geometry.size.height - 50
+            // 50 случайное число, просто чтобы не впритык к экрану
+            birdVelocity.dy = 0
+        }
+        
+        if birdPosition.y <= 0 {
+            birdPosition.y = 0
+        }
     }
 }
 
