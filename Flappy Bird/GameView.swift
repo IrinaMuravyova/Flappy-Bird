@@ -35,6 +35,8 @@ struct GameView: View {
     
     @State private var gameState: GameState = .ready
     
+    @State private var passedPipe = false
+    
     var body: some View {
         GeometryReader { geo in
             NavigationStack {
@@ -88,6 +90,8 @@ struct GameView: View {
                     if checkColisions(geometry: geo) {
                         gameState = .stop
                     }
+                    
+                    updateScore(geometry: geo)
                     
                     lastUpdateTime = currentTime
                 })
@@ -148,6 +152,7 @@ struct GameView: View {
         birdPosition = CGPoint(x: 100, y: 300)
         pipeOffset = 0
         score = 0
+        topPipeHeight = CGFloat.random(in: 100...500)
     }
     
     private func checkColisions(geometry: GeometryProxy) -> Bool {
@@ -165,6 +170,20 @@ struct GameView: View {
                                   height: topPipeHeight)
         return birdFrame.intersects(topPipeFrame) || birdFrame.intersects(bottomPipeFrame)
         //проверяем на пересечение птицы и верхней трубы
+    }
+    
+    //проверяем что птица прошла трубу
+    private func updateScore(geometry: GeometryProxy) {
+        if pipeOffset + pipeWeight + geometry.size.width < birdPosition.x  && !passedPipe {
+            score += 1
+            passedPipe = true // вышли из трубы
+            
+            if score > highScore {
+                highScore = score
+            }
+        } else if pipeOffset + geometry.size.width > birdPosition.x {
+            passedPipe = false // вошли в трубу
+        }
     }
 }
 
