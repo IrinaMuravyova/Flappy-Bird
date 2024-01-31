@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-
+///Discribtion top and bottom pipes
 struct PipesView: View {
-    
+    ///The same for top and bottom pipes
     let pipeWeight: CGFloat
+    ///Space between pipes
     let spacingHeight: CGFloat
+    ///Hight of the top pipe
     let topPipeHeight: CGFloat
     
     var body: some View {
