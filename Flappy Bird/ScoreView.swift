@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
-
+///Show score data, include current score, best score
 struct ScoreView: View {
-    
+    ///Current score
     let score: Int
+    ///Best score, reset after app off
     let highScore: Int
+    ///Start new game and current score starts from zero
     let resetAction: () -> Void
     
     var body: some View {
