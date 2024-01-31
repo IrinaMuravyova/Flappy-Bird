@@ -6,9 +6,9 @@
 //
 
 import SwiftUI
-
+///Discribtion flyed bird
 struct BirdView: View {
-    
+    ///bird's size = bird's weight = bird's hight
     let birdSize: CGFloat
     
     var body: some View {
