@@ -25,22 +25,21 @@
 * проверка пересечения объектов
 
 
-![screenshot of sample](https://i.ibb.co/7NFhZ9X/flappy-bird.png)
+![screenshot of sample](https://i.ibb.co/BZbfSRF/flappy-bird.png)
 
 ## Documentation
 
 ### ViewControllers:
 
 * Flappy_BirdApp - точка входа в программу.
-     
   
-* GameView - 
+* GameView - основная логика программы (движение труб, движение птицы, обработка коллизий)
   
-* BirdView -
+* BirdView - отвечает за разамеры птички
   
-* PipesView -
+* PipesView - отвечает за размеры и расположение труб на экране
   
-* ScoreView -
+* ScoreView - отвечает за экран с очками по итогу игры
   
 
 ## Developers
